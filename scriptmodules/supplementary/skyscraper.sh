@@ -258,8 +258,8 @@ function _scrape_skyscraper() {
 
     iniConfig " = " '"' "$configdir/all/skyscraper.cfg"
     eval $(_load_config_skyscraper)
-
-    local -a params=(-p "$system")
+# add -i input to seperate platform from rom folder name
+    local -a params=(-p "${system%%-*}" -i "$romdir/$system")
     local flags="unattend,skipped,"
 
     [[ "$download_videos" -eq 1 ]] && flags+="videos,"
@@ -279,13 +279,16 @@ function _scrape_skyscraper() {
     [[ "$remove_brackets" -eq 1 ]] && flags+="nobrackets,"
 
     if [[ "$use_rom_folder" -eq 1 ]]; then
+        local system="$1"
         params+=(-g "$romdir/$system")
         params+=(-o "$romdir/$system/media")
         # If we're saving to the ROM folder, then use relative paths in the gamelist
         flags+="relative,"
     else
+        local system="$1"
         params+=(-g "$home/.emulationstation/gamelists/$system")
-        params+=(-o "$home/.emulationstation/downloaded_media/$system")
+        #Move media folder into RetroPie Parent Folder
+        params+=(-o "$romdir/../media/$system")
     fi
 
     # If 2nd parameter is unset, use the configured scraping source, otherwise scrape from cache.

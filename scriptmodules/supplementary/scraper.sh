@@ -77,8 +77,8 @@ function scrape_scraper() {
         img_path="./images"
     else
         gamelist="$home/.emulationstation/gamelists/$system/gamelist.xml"
-        img_dir="$home/.emulationstation/downloaded_images/$system"
-        img_path="~/.emulationstation/downloaded_images/$system"
+        img_dir="$home/RetroPie/media/$system"
+        img_path="~/RetroPie/media/$system"
     fi
 
     local params=()
