@@ -16,3 +16,4 @@ tmp/
 # 3rd Party Repos
 ext/*
 ./log.txt
+log.txt

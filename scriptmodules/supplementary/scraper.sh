@@ -93,13 +93,13 @@ function scrape_scraper() {
     params+=(-workers "4")
     params+=(-skip_check)
 
-    [[ "$system" =~ ^mame-|arcade|fba|neogeo ]] && params+=(-mame)
+    [[ "$system" =~ ^mame-|arcade|fba|neogeo|hbmame ]] && params+=(-mame)
 
     if [[ "$use_thumbs" -eq 1 ]]; then
         params+=(-thumb_only)
     fi
     if [[ "$screenshots" -eq 1 ]]; then
-        if [[ "$system" =~ ^mame-|arcade|fba|neogeo ]]; then
+        if [[ "$system" =~ ^mame-|arcade|fba|neogeo|hbmame ]]; then
             params+=(-mame_img "s,m,t")
         else
             params+=(-console_img "s,b,3b,l,f")
