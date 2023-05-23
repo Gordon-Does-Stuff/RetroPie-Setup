@@ -434,7 +434,7 @@ def ra_btn_swap_config():
     Returns the state of 'menu_swap_ok_cancel_buttons' configuration for RetroArch
     """
     config = ConfigParser(delimiters="=", strict=False, interpolation=None)
-    with open(CONFIG_DIR + '/all/retroarch.cfg', 'r') as cfg_file:
+    with open(CONFIG_DIR + '/all/retroarch/retroarch.cfg', 'r') as cfg_file:
         config.read_string('[device]\n' + cfg_file.read())
         try:
             menu_swap = config['device']['menu_swap_ok_cancel_buttons'].strip('"') == 'true'

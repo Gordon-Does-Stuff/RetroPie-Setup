@@ -553,8 +553,8 @@ function mkRomDir() {
 ## @param to destination directory
 ## @brief Moves the contents of a folder and symlinks to the new location.
 function moveConfigDir() {
-    local from="$1"
-    local to="$2"
+    local from="$2"
+    local to="$1"
 
     # if we are in remove mode - remove the symlink
     if [[ "$md_mode" == "remove" ]]; then
@@ -1022,7 +1022,7 @@ function defaultRAConfig() {
     done <<< "${defaults[@]}"
 
     # include the main retroarch config
-    echo -e "\n#include \"$configdir/all/retroarch.cfg\"" >>"$config"
+    echo -e "\n#include \"$configdir/all/retroarch/retroarch.cfg\"" >>"$config"
 
     copyDefaultConfig "$config" "$config_path/retroarch.cfg"
     rm "$config"

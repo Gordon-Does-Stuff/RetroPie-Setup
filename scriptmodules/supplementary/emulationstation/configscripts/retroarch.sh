@@ -10,7 +10,7 @@
 #
 
 function onstart_retroarch_joystick() {
-    iniConfig " = " '"' "$configdir/all/retroarch.cfg"
+    iniConfig " = " '"' "$configdir/all/retroarch/retroarch.cfg"
     iniGet "input_joypad_driver"
     local input_joypad_driver="$ini_value"
     if [[ -z "$input_joypad_driver" ]]; then
@@ -33,7 +33,7 @@ function onstart_retroarch_joystick() {
 }
 
 function onstart_retroarch_keyboard() {
-    iniConfig " = " '"' "$configdir/all/retroarch.cfg"
+    iniConfig " = " '"' "$configdir/all/retroarch/retroarch.cfg"
 
     _retroarch_select_hotkey=1
 

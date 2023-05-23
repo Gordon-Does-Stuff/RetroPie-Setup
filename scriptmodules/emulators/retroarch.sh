@@ -279,7 +279,7 @@ function configure_retroarch() {
     # enable video shaders
     iniSet "video_shader_enable" "true"
 
-    copyDefaultConfig "$config" "$configdir/all/retroarch.cfg"
+    copyDefaultConfig "$config" "$configdir/all/retroarch/retroarch.cfg"
     rm "$config"
 
     # if no menu_driver is set, force RGUI, as the default has now changed to XMB.
@@ -315,8 +315,8 @@ function configure_retroarch() {
 }
 
 function keyboard_retroarch() {
-    if [[ ! -f "$configdir/all/retroarch.cfg" ]]; then
-        printMsgs "dialog" "No RetroArch configuration file found at $configdir/all/retroarch.cfg"
+    if [[ ! -f "$configdir/all/retroarch/retroarch.cfg" ]]; then
+        printMsgs "dialog" "No RetroArch configuration file found at $configdir/all/retroarch/retroarch.cfg"
         return
     fi
     local input
@@ -328,14 +328,14 @@ function keyboard_retroarch() {
         key+=("${parts[0]}")
         options+=("${parts[0]}" $i 2 "${parts[*]:2}" $i 26 16 0)
         ((i++))
-    done < <(grep "^[[:space:]]*input_player[0-9]_[a-z]*" "$configdir/all/retroarch.cfg")
+    done < <(grep "^[[:space:]]*input_player[0-9]_[a-z]*" "$configdir/all/retroarch/retroarch.cfg")
     local cmd=(dialog --backtitle "$__backtitle" --form "RetroArch keyboard configuration" 22 48 16)
     local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
     if [[ -n "$choice" ]]; then
         local value
         local values
         readarray -t values <<<"$choice"
-        iniConfig " = " "" "$configdir/all/retroarch.cfg"
+        iniConfig " = " "" "$configdir/all/retroarch/retroarch.cfg"
         i=0
         for value in "${values[@]}"; do
             iniSet "${key[$i]}" "$value" >/dev/null
@@ -345,7 +345,7 @@ function keyboard_retroarch() {
 }
 
 function hotkey_retroarch() {
-    iniConfig " = " '"' "$configdir/all/retroarch.cfg"
+    iniConfig " = " '"' "$configdir/all/retroarch/retroarch.cfg"
     local cmd=(dialog --backtitle "$__backtitle" --menu "Choose the desired hotkey behaviour." 22 76 16)
     local options=(1 "Hotkeys enabled. (default)"
              2 "Press ALT to enable hotkeys."
@@ -430,12 +430,12 @@ function gui_retroarch() {
     done
 }
 
-# adds a retroarch global config option in `$configdir/all/retroarch.cfg`, if not already set
+# adds a retroarch global config option in `$configdir/all/retroarch/retroarch.cfg`, if not already set
 function _set_config_option_retroarch()
 {
     local option="$1"
     local value="$2"
-    iniConfig " = " "\"" "$configdir/all/retroarch.cfg"
+    iniConfig " = " "\"" "$configdir/all/retroarch/retroarch.cfg"
     iniGet "$option"
     if [[ -z "$ini_value" ]]; then
         iniSet "$option" "$value"

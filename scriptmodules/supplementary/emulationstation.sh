@@ -13,7 +13,7 @@ rp_module_id="emulationstation"
 rp_module_desc="EmulationStation - Frontend used by RetroPie for launching emulators"
 rp_module_licence="MIT https://raw.githubusercontent.com/RetroPie/EmulationStation/master/LICENSE.md"
 rp_module_repo="git https://github.com/RetroPie/EmulationStation :_get_branch_emulationstation"
-rp_module_section="core"
+rp_module_section=""
 rp_module_flags="frontend"
 
 function _get_input_cfg_emulationstation() {
@@ -271,12 +271,12 @@ _EOF_
     chmod +x /usr/bin/emulationstation
 
     if isPlatform "x11"; then
-        mkdir -p /usr/local/share/{icons,applications}
-        cp "$scriptdir/scriptmodules/$md_type/emulationstation/retropie.svg" "/usr/local/share/icons/"
-        cat > /usr/local/share/applications/retropie.desktop << _EOF_
+        #mkdir -p /usr/local/share/{icons,applications}
+        cp "$scriptdir/scriptmodules/$md_type/emulationstation/retropie.svg" "$home/.local/share/icons/"
+        cat > $home/.local/share/applications/retropie.desktop << _EOF_
 [Desktop Entry]
 Type=Application
-Exec=gnome-terminal --full-screen --hide-menubar -e emulationstation
+Exec=x-terminal-emulator -e emulationstation  --no-confirm-quit  --windowed --resolution 1920 1080
 Hidden=false
 NoDisplay=false
 X-GNOME-Autostart-enabled=true
@@ -284,9 +284,11 @@ Name[de_DE]=RetroPie
 Name=rpie
 Comment[de_DE]=RetroPie
 Comment=retropie
-Icon=/usr/local/share/icons/retropie.svg
+Icon=/home/$user/.local/share/icons/retropie.svg
 Categories=Game
 _EOF_
+
+        chown $user:$user "$home/.local/share/applications/retropie.desktop" "$home/.local/share/icons/retropie.svg"
     fi
 }
 
@@ -298,7 +300,7 @@ function clear_input_emulationstation() {
 function remove_emulationstation() {
     rm -f "/usr/bin/emulationstation"
     if isPlatform "x11"; then
-        rm -rfv "/usr/local/share/icons/retropie.svg" "/usr/local/share/applications/retropie.desktop"
+        rm -rfv "$home/.local/share/icons/retropie.svg" "$home/.local/share/applications/retropie.desktop"
     fi
 }
 
@@ -378,7 +380,7 @@ function gui_emulationstation() {
                 setAutoConf "es_swap_a_b" "$es_swap"
                 local ra_swap="false"
                 getAutoConf "es_swap_a_b" && ra_swap="true"
-                iniSet "menu_swap_ok_cancel_buttons" "$ra_swap" "$configdir/all/retroarch.cfg"
+                iniSet "menu_swap_ok_cancel_buttons" "$ra_swap" "$configdir/all/retroarch/retroarch.cfg"
                 printMsgs "dialog" "You will need to reconfigure you controller in Emulation Station for the changes to take effect."
                 ;;
         esac

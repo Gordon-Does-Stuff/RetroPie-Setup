@@ -76,9 +76,9 @@
 ## On launch this script waits for two seconds for a key or joystick press. If
 ## pressed the GUI is shown, where a user can set video modes, default emulators
 ## and other options (depending what is being launched).
-
+home="$(eval echo ~$user)"
 ROOTDIR="/opt/retropie"
-CONFIGDIR="$ROOTDIR/configs"
+CONFIGDIR="$home/opt/retropie/configs"
 LOG="/dev/shm/runcommand.log"
 
 RUNCOMMAND_CONF="$CONFIGDIR/all/runcommand.cfg"

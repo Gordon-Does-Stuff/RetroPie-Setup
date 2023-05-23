@@ -120,7 +120,7 @@ function configure_amiberry() {
 
     # symlink the retroarch config / autoconfigs for amiberry to use
     ln -sf "$configdir/all/retroarch/autoconfig" "$md_inst/controllers"
-    ln -sf "$configdir/all/retroarch.cfg" "$md_inst/conf/retroarch.cfg"
+    ln -sf "$configdir/all/retroarch/retroarch.cfg" "$md_inst/conf/retroarch.cfg"
 
     local config_dir="$md_conf_root/amiga/amiberry"
 
