@@ -78,7 +78,7 @@
 ## and other options (depending what is being launched).
 home="$(eval echo ~$user)"
 ROOTDIR="/opt/retropie"
-CONFIGDIR="$home/opt/retropie/configs"
+CONFIGDIR="$home/.opt/retropie/configs"
 LOG="/dev/shm/runcommand.log"
 
 RUNCOMMAND_CONF="$CONFIGDIR/all/runcommand.cfg"

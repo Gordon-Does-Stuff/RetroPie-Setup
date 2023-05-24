@@ -76,7 +76,7 @@ JS_HAT_VALUES = {
 }
 
 # RetroPie configurations directory
-CONFIG_DIR = '/opt/retropie/configs'
+CONFIG_DIR = os.path.expanduser ('~/.opt/retropie/configs/')
 
 
 class InputDev(object):
