@@ -311,6 +311,11 @@ function get_os_version() {
 
     [[ -n "$error" ]] && fatalError "$error\n\n$(lsb_release -idrc)"
 
+    # check for Armbian, which can be built on Debian/Ubuntu
+    if [[ -f /etc/armbian-release ]]; then
+        __platform_flags+=("armbian")
+    fi
+
     # configure Raspberry Pi graphics stack
     isPlatform "rpi" && get_rpi_video
 }
@@ -371,34 +376,42 @@ function get_rpi_video() {
     export PKG_CONFIG_PATH="$pkgconfig"
 }
 
+function get_rpi_model() {
+    # calculated based on the information from https://github.com/AndrewFromMelbourne/raspberry_pi_revision
+    # see also https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#raspberry-pi-revision-codes
+    local rev="0x$(sed -n '/^Revision/s/^.*: \(.*\)/\1/p' < /proc/cpuinfo)"
+    # if bit 23 is not set, we are on a rpi1 (bit 23 means the revision is a bitfield)
+    if [[ $((($rev >> 23) & 1)) -eq 0 ]]; then
+        __platform="rpi1"
+    else
+        # if bit 23 is set, get the cpu from bits 12-15
+        local cpu=$((($rev >> 12) & 15))
+        case $cpu in
+            0)
+                __platform="rpi1"
+                ;;
+            1)
+                __platform="rpi2"
+                ;;
+            2)
+                __platform="rpi3"
+                ;;
+            3)
+                __platform="rpi4"
+                ;;
+            4)
+                __platform="rpi5"
+                ;;
+        esac
+    fi
+}
 function get_platform() {
     local architecture="$(uname --machine)"
     if [[ -z "$__platform" ]]; then
         case "$(sed -n '/^Hardware/s/^.*: \(.*\)/\1/p' < /proc/cpuinfo)" in
             BCM*)
-                # calculated based on information from https://github.com/AndrewFromMelbourne/raspberry_pi_revision
-                local rev="0x$(sed -n '/^Revision/s/^.*: \(.*\)/\1/p' < /proc/cpuinfo)"
-                # if bit 23 is not set, we are on a rpi1 (bit 23 means the revision is a bitfield)
-                if [[ $((($rev >> 23) & 1)) -eq 0 ]]; then
-                    __platform="rpi1"
-                else
-                    # if bit 23 is set, get the cpu from bits 12-15
-                    local cpu=$((($rev >> 12) & 15))
-                    case $cpu in
-                        0)
-                            __platform="rpi1"
-                            ;;
-                        1)
-                            __platform="rpi2"
-                            ;;
-                        2)
-                            __platform="rpi3"
-                            ;;
-                        3)
-                            __platform="rpi4"
-                            ;;
-                    esac
-                fi
+                # RPI kernels before 2023-11-24 print a 'Hardware: BCM2835' line
+                get_rpi_model
                 ;;
             *ODROIDC)
                 __platform="odroid-c1"
@@ -426,6 +439,9 @@ function get_platform() {
                 # refer to the nv.sh script in the L4T DTS for a similar implementation
                 if [[ -e "/proc/device-tree/compatible" ]]; then
                     case "$(tr -d '\0' < /proc/device-tree/compatible)" in
+                        *raspberrypi*)
+                            get_rpi_model
+                            ;;
                         *tegra186*)
                             __platform="tegra-x2"
                             ;;
@@ -565,6 +581,11 @@ function platform_rpi3() {
 
 function platform_rpi4() {
     cpu_armv8 "cortex-a72"
+    __platform_flags+=(rpi gles gles3 gles31)
+}
+
+function platform_rpi5() {
+    cpu_armv8 "cortex-a76"
     __platform_flags+=(rpi gles gles3 gles31)
 }
 
