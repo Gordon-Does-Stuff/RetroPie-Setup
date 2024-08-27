@@ -560,11 +560,11 @@ function mkUserDir() {
 ## @brief Creates a directory under $romdir owned by the current user.
 function mkRomDir() {
     mkUserDir "$romdir/$1"
-    if [[ "$1" == "megadrive" ]]; then
-        pushd "$romdir"
-        ln -snf "$1" "genesis"
-        popd
-    fi
+    #if [[ "$1" == "megadrive" ]]; then
+    #    pushd "$romdir"
+    #    ln -snf "$1" "genesis"
+    #    popd
+    #fi
 }
 
 ## @fn moveConfigDir()
@@ -1041,7 +1041,7 @@ function defaultRAConfig() {
     done <<< "${defaults[@]}"
 
     # include the main retroarch config
-    echo -e "\n#include \"$configdir/all/retroarch/retroarch.cfg\"" >>"$config"
+    echo -e "\n#include \"/home/$user/.config/retroarch/retroarch.cfg\"" >>"$config"
 
     copyDefaultConfig "$config" "$config_path/retroarch.cfg"
     rm "$config"
