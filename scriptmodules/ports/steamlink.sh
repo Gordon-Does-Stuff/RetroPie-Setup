@@ -13,7 +13,7 @@ rp_module_id="steamlink"
 rp_module_desc="Steam Link for Raspberry Pi 3 or later"
 rp_module_licence="PROP https://steamcommunity.com/app/353380/discussions/0/1743353164093954254/"
 rp_module_section="exp"
-rp_module_flags="!all rpi3 rpi4 !64bit"
+rp_module_flags="!all rpi3 rpi4 rpi5"
 rp_module_help="Stream games from your computer with Steam"
 
 function depends_steamlink() {
@@ -40,7 +40,7 @@ function configure_steamlink() {
 
         # create optional streaming_args.txt for user modification
         touch "$valve_dir/SteamLink/streaming_args.txt"
-        chown $user:$user "$valve_dir/SteamLink/streaming_args.txt"
+        chown "$__user":"$__group" "$valve_dir/SteamLink/streaming_args.txt"
         moveConfigFile "$valve_dir/SteamLink/streaming_args.txt" "$md_conf_root/$md_id/streaming_args.txt"
     fi
 
