@@ -301,7 +301,7 @@ function _get_clioptions_skyscraper() {
     iniConfig " = " '"' "$configdir/all/skyscraper.cfg"
     eval $(_load_config_skyscraper)
 
-    [[ "$system" != "<platform>" ]] && system=\"${system%%-*}"\"
+    [[ "$system" != "<platform>" ]] && system=\"${system%%-*}\"
 
     params+=(-p "$system")
     flags="unattend,skipped,"
